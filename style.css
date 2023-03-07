@@ -1,0 +1,66 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+
+.score__inner{
+    color: black;
+    font-size: 40px;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-weight: 500;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.field{
+    width: 500px;
+    height: 500px;
+    box-sizing: content-box;
+    border: 5px solid black;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+}
+
+
+.container{
+    width: 768;
+    height: 596px;
+    margin: 0 auto;
+}
+
+.game{
+    background-color: #F0D8D8;
+    height: 100vh;
+}
+
+.field__cell{
+    width: 20px;
+    height: 20px;
+    
+}
+
+.field__cell:nth-child(2n+1){
+    background-color: #78D74B;
+}
+
+.field__cell:nth-child(2n+2){
+    background-color: #39A845;
+}
+
+.field__cell.snake__head{
+    background: url(./img/snake_head.svg);
+    /* background-position: center;
+    background-size: cover; */
+    border: #000000 solid 1px;
+}
+
+.field__cell.snake__body{
+    background: #784BD7;
+    border: #000000 solid 1px;
+}
