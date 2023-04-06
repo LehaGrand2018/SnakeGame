@@ -1,7 +1,8 @@
 const FIELD_SIZE = 625;
 const FIELD_WIDTH = 25;
 const FIELD_HEIGHT = 25;
-const START_SNAKE_SIZE = 10;
+const START_SNAKE_SIZE = 20;
+const UPDATE_TIME = 100
 
 const gameData = {
     lastDirection: 'right',
@@ -208,6 +209,12 @@ const generateRandomDirection = (gameData, generateRandNum = generateRandomNumbe
 const spawnApple = (gameData) => {
     gameData.apple.X = generateRandomNumber(0,FIELD_WIDTH-1);
     gameData.apple.Y = generateRandomNumber(0,FIELD_HEIGHT-1);
+    let coordinate = translateCoordinatesToIndex(gameData.apple);
+    for(let index = 0; index < gameData.snake.snakeCells.length; index++ ){
+        if(coordinate  === gameData.snake.snakeCells[index].coordinate){
+            spawnApple(gameData);
+        }
+    }
     // gameData.field[translateCoordinatesToNumber(gameData.apple.X, gameData.apple.Y)].fieldPart = 'apple';
 } // checked
 
@@ -215,7 +222,7 @@ const spawnSnake = (gameData) => {
 
     gameData.snake.snakeCells[0].type = 'head';
     gameData.snake.snakeCells[0].coordinate = translateCoordinatesToIndex(gameData.currentHead);
-
+    
     switch (gameData.currentDirection) {
         case 'right':
             for(let index = 1; index < START_SNAKE_SIZE; index++){
@@ -324,15 +331,12 @@ const onApple = (gameData) => {
 }
 
 const checkIsCross = (snakeCells) => {
-    console.log('HEAD: '+ snakeCells[0].coordinate);
     for(let index = 1; index < snakeCells.length; index++ ){
-        console.log('BODY: ' + snakeCells[index].coordinate);
         if(snakeCells[0].coordinate  === snakeCells[index].coordinate){
                 return true;
         }   
     }
     return false;
-    console.log('-----------------------')
 }
 
 const updateGame = () => {
@@ -384,7 +388,7 @@ spawnSnake(gameData);
 renderField(gameData);
 
 
-setInterval(updateGame, 100);
+setInterval(updateGame, UPDATE_TIME);
 
 // updateGame(gameData);
 
