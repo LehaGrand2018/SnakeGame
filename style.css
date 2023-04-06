@@ -53,6 +53,13 @@
     background-color: #39A845;
 }
 
+
+.field__cell.snake__body{
+    background: #784BD7;
+    border: #000000 solid 1px;
+}
+
+
 .field__cell.snake__head{
     background: url(./img/snake_head.svg);
     /* background-position: center;
@@ -60,7 +67,8 @@
     border: #000000 solid 1px;
 }
 
-.field__cell.snake__body{
-    background: #784BD7;
+.field__cell.apple{
+    background: #ff0000;
     border: #000000 solid 1px;
+    
 }
