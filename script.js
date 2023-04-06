@@ -1,7 +1,7 @@
 const FIELD_SIZE = 625;
 const FIELD_WIDTH = 25;
 const FIELD_HEIGHT = 25;
-const START_SNAKE_SIZE = 20;
+const START_SNAKE_SIZE = 5;
 const UPDATE_TIME = 100
 
 const gameData = {
