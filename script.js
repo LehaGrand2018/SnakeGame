@@ -57,33 +57,71 @@ for (let i = 0; i < gameData.field.length; i++) {
     }
 }
 
-const listenButton = (gameData) => {
-
-    document.addEventListener("keydown", (pressedKey) =>{
-
-    //    console.dir(`Key: ${pressedKey.key} -- Code: ${pressedKey.keyCode}`); 
-        if(gameData.currentDirection !== 'left' && 
+const listenerOfClick = (pressedKey) => {
+    if(gameData.currentDirection !== 'left' && 
         (pressedKey.key === 'ArrowRight' || pressedKey.keyCode === 68)){
             gameData.currentDirection = 'right';
             console.log('Right');
+            document.removeEventListener("keydown", listenerOfClick);
         }
         if(gameData.currentDirection !== 'right' && 
         (pressedKey.key === 'ArrowLeft' || pressedKey.keyCode === 65)){
             gameData.currentDirection = 'left';
             console.log('Left');
+            document.removeEventListener("keydown", listenerOfClick);
         }
         if(gameData.currentDirection !== 'down' && 
         (pressedKey.key === 'ArrowUp' || pressedKey.keyCode === 87)){
             gameData.currentDirection = 'up';
             console.log('Up');
+            document.removeEventListener("keydown", listenerOfClick);
         }
         if(gameData.currentDirection !== 'up' && 
         (pressedKey.key === 'ArrowDown' || pressedKey.keyCode == 83)){
             gameData.currentDirection = 'down';
             console.log('Down');
+            document.removeEventListener("keydown", listenerOfClick);
         }
-    }, false);
 }
+
+const listenButton = (gameData) => {
+    document.addEventListener("keydown", listenerOfClick);
+}
+
+// const listenButton = (gameData) => {
+
+    // document.addEventListener("keydown", (pressedKey) =>{
+    // 
+    //    console.dir(`Key: ${pressedKey.key} -- Code: ${pressedKey.keyCode}`); 
+        // if(gameData.currentDirection !== 'left' && 
+        // (pressedKey.key === 'ArrowRight' || pressedKey.keyCode === 68)){
+        //     gameData.currentDirection = 'right';
+        //     console.log('Right');
+        //     return;
+        // }
+        // if(gameData.currentDirection !== 'right' && 
+        // (pressedKey.key === 'ArrowLeft' || pressedKey.keyCode === 65)){
+        //     gameData.currentDirection = 'left';
+        //     console.log('Left');
+        //     return;
+        // }
+        // if(gameData.currentDirection !== 'down' && 
+        // (pressedKey.key === 'ArrowUp' || pressedKey.keyCode === 87)){
+        //     gameData.currentDirection = 'up';
+        //     console.log('Up');
+        //     return;
+        // }
+        // if(gameData.currentDirection !== 'up' && 
+        // (pressedKey.key === 'ArrowDown' || pressedKey.keyCode == 83)){
+        //     gameData.currentDirection = 'down';
+        //     console.log('Down');
+        //     return;
+        // }
+        // return;
+        // 
+    // });
+    
+// }
 
 const clearField = (gameData) => {
     gameData.field.forEach(element => {

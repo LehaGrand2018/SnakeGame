@@ -42,7 +42,6 @@
 .field__cell{
     width: 20px;
     height: 20px;
-    
 }
 
 .field__cell:nth-child(2n+1){
