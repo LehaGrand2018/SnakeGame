@@ -57,6 +57,14 @@ for (let i = 0; i < gameData.field.length; i++) {
     }
 }
 
+// Initialize fieldHTML Array
+for (let i = 0; i < gameData.field.length; i++) {
+    const snakeCell = document.createElement('div');
+    snakeCell.className = 'field__cell';
+    const fieldNode = document.querySelector('.field');
+    fieldNode.append(snakeCell);
+}
+
 const listenerOfClick = (pressedKey) => {
     if(gameData.currentDirection !== 'left' && 
         (pressedKey.key === 'ArrowRight' || pressedKey.keyCode === 68)){
@@ -144,7 +152,7 @@ const changeHeadCoordinates = (gameData) => {
 
     switch(gameData.currentDirection){
         case 'right':
-            if (gameData.currentHead.X != (gameData.fieldBorderCoordinates.right)) {
+            if (gameData.currentHead.X < (gameData.fieldBorderCoordinates.right)) {
                 clearField(gameData);
                 gameData.currentHead.X += 1;
                 rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
@@ -155,7 +163,7 @@ const changeHeadCoordinates = (gameData) => {
             }
             break;
         case 'left':
-            if (gameData.currentHead.X != (gameData.fieldBorderCoordinates.left)) {
+            if (gameData.currentHead.X > (gameData.fieldBorderCoordinates.left)) {
                 clearField(gameData);
                 gameData.currentHead.X -= 1;
                 rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
