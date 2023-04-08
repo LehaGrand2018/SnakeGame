@@ -148,7 +148,7 @@ const rewriteSnakeCoordinates = (snakeCells, coordinate) => {
     snakeCells[0].type = 'head';
 }
 
-const changeHeadCoordinates = (gameData) => {
+const changeHeadCoordinatesWithFieldBorders = (gameData) => {
 
     switch(gameData.currentDirection){
         case 'right':
@@ -196,6 +196,47 @@ const changeHeadCoordinates = (gameData) => {
         default:
             break;
     }
+}
+
+const changeHeadCoordinatesWithoutFieldBorders = (gameData) => {
+    console.log('Current HEAD: ' + 'X: ' + gameData.currentHead.X + ' ' + 'Y: ' + gameData.currentHead.Y);
+    switch(gameData.currentDirection){
+        case 'right':
+            if (gameData.currentHead.X === (gameData.fieldBorderCoordinates.right)) {
+                gameData.currentHead.X -= 25;
+            }
+            clearField(gameData);
+            gameData.currentHead.X += 1;
+            rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
+            break;
+        case 'left':
+            if (gameData.currentHead.X === (gameData.fieldBorderCoordinates.left)) {
+                gameData.currentHead.X += 25;
+            }
+            clearField(gameData);
+            gameData.currentHead.X -= 1;
+            rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
+           break;
+        case 'up':
+            if (gameData.currentHead.Y === (gameData.fieldBorderCoordinates.top )) {
+                gameData.currentHead.Y += 25;
+            }
+            clearField(gameData);
+            gameData.currentHead.Y -= 1;
+            rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
+           break;
+        case 'down':
+            if (gameData.currentHead.Y === (gameData.fieldBorderCoordinates.bottom)) {
+                gameData.currentHead.Y -= 25;
+            }
+            clearField(gameData);
+            gameData.currentHead.Y += 1;
+            rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
+           break;
+        default:
+            break;
+        }
+    console.log('END: '  + 'X: ' + gameData.currentHead.X + ' ' + 'Y: ' + gameData.currentHead.Y);
 }
 
 const translateCoordinatesToIndex = (currentHead) => {
@@ -390,7 +431,8 @@ const updateGame = () => {
         
         gameData.field[translateCoordinatesToIndex(gameData.apple)].fieldPart = 'apple';
         listenButton(gameData);
-        changeHeadCoordinates(gameData);
+        // changeHeadCoordinatesWithFieldBorders(gameData);
+        changeHeadCoordinatesWithoutFieldBorders(gameData);
         syncSnakeWithField(gameData);   
         renderField(gameData);
 
@@ -440,4 +482,10 @@ setInterval(updateGame, UPDATE_TIME);
 
 // Game Process
 
+
+
+
+const updateTimeForm = document.querySelector("update__time_form");
+updateTimeForm.textContent = 'hello';
+console.log(updateTimeForm);
 
