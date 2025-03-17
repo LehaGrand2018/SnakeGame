@@ -2,10 +2,10 @@
 const FIELD_WIDTH = 25;
 const FIELD_HEIGHT = 25;
 const FIELD_SIZE = FIELD_HEIGHT * FIELD_WIDTH;
-const START_SNAKE_SIZE = 5;
-const UPDATE_TIME = 50;
+const START_SNAKE_SIZE = 10;
+const UPDATE_TIME = 100;
 const CHECK_CROSS = true;
-const FIELD_BORDERS = true;
+const FIELD_BORDERS = false;
 
 // SETTINGS
 
