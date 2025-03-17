@@ -1,8 +1,13 @@
-const FIELD_SIZE = 625;
+// SETTINGS
 const FIELD_WIDTH = 25;
 const FIELD_HEIGHT = 25;
+const FIELD_SIZE = FIELD_HEIGHT * FIELD_WIDTH;
 const START_SNAKE_SIZE = 5;
-const UPDATE_TIME = 100;
+const UPDATE_TIME = 50;
+const CHECK_CROSS = true;
+const FIELD_BORDERS = true;
+
+// SETTINGS
 
 const gameData = {
     lastDirection: 'right',
@@ -45,7 +50,7 @@ const gameData = {
 for (let i = 0; i < START_SNAKE_SIZE; i++) {
     gameData.snake.snakeCells.push({
         type: 'undefined',
-        coordinate: -1,
+        coordinate: '',
     });
 }
 
@@ -57,6 +62,7 @@ for (let i = 0; i < gameData.field.length; i++) {
     }
 }
 
+
 // Initialize fieldHTML Array
 for (let i = 0; i < gameData.field.length; i++) {
     const snakeCell = document.createElement('div');
@@ -64,6 +70,10 @@ for (let i = 0; i < gameData.field.length; i++) {
     const fieldNode = document.querySelector('.field');
     fieldNode.append(snakeCell);
 }
+
+const restartButton = document.querySelector('.restart__button');
+
+
 
 const listenerOfClick = (pressedKey) => {
     if(gameData.currentDirection !== 'left' && 
@@ -96,41 +106,6 @@ const listenButton = (gameData) => {
     document.addEventListener("keydown", listenerOfClick);
 }
 
-// const listenButton = (gameData) => {
-
-    // document.addEventListener("keydown", (pressedKey) =>{
-    // 
-    //    console.dir(`Key: ${pressedKey.key} -- Code: ${pressedKey.keyCode}`); 
-        // if(gameData.currentDirection !== 'left' && 
-        // (pressedKey.key === 'ArrowRight' || pressedKey.keyCode === 68)){
-        //     gameData.currentDirection = 'right';
-        //     console.log('Right');
-        //     return;
-        // }
-        // if(gameData.currentDirection !== 'right' && 
-        // (pressedKey.key === 'ArrowLeft' || pressedKey.keyCode === 65)){
-        //     gameData.currentDirection = 'left';
-        //     console.log('Left');
-        //     return;
-        // }
-        // if(gameData.currentDirection !== 'down' && 
-        // (pressedKey.key === 'ArrowUp' || pressedKey.keyCode === 87)){
-        //     gameData.currentDirection = 'up';
-        //     console.log('Up');
-        //     return;
-        // }
-        // if(gameData.currentDirection !== 'up' && 
-        // (pressedKey.key === 'ArrowDown' || pressedKey.keyCode == 83)){
-        //     gameData.currentDirection = 'down';
-        //     console.log('Down');
-        //     return;
-        // }
-        // return;
-        // 
-    // });
-    
-// }
-
 const clearField = (gameData) => {
     gameData.field.forEach(element => {
         if(element.fieldPart !== 'apple'){
@@ -138,6 +113,7 @@ const clearField = (gameData) => {
         }
     });
 }
+
 
 const rewriteSnakeCoordinates = (snakeCells, coordinate) => {
     for (let index = snakeCells.length - 1; index > 0 ; index--) {
@@ -148,15 +124,14 @@ const rewriteSnakeCoordinates = (snakeCells, coordinate) => {
     snakeCells[0].type = 'head';
 }
 
-const changeHeadCoordinatesWithFieldBorders = (gameData) => {
 
+const changeHeadCoordinatesWithFieldBorders = (gameData) => {
+    clearField(gameData);
     switch(gameData.currentDirection){
         case 'right':
             if (gameData.currentHead.X < (gameData.fieldBorderCoordinates.right)) {
-                clearField(gameData);
-                gameData.currentHead.X += 1;
-                rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
                 
+                gameData.currentHead.X += 1;
             } else {
                 gameData.gameOver = true;
                 console.log('Game Over!');
@@ -164,9 +139,7 @@ const changeHeadCoordinatesWithFieldBorders = (gameData) => {
             break;
         case 'left':
             if (gameData.currentHead.X > (gameData.fieldBorderCoordinates.left)) {
-                clearField(gameData);
                 gameData.currentHead.X -= 1;
-                rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
             } else {
                 gameData.gameOver = true;
                 console.log('Game Over!');
@@ -174,9 +147,7 @@ const changeHeadCoordinatesWithFieldBorders = (gameData) => {
            break;
         case 'up':
             if (gameData.currentHead.Y > (gameData.fieldBorderCoordinates.top )) {
-                clearField(gameData);
                 gameData.currentHead.Y -= 1;
-                rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
             } else {
                 console.log('Game Over!');
                 console.dir(gameData.snake.snakeCells);
@@ -185,58 +156,57 @@ const changeHeadCoordinatesWithFieldBorders = (gameData) => {
            break;
         case 'down':
             if (gameData.currentHead.Y < (gameData.fieldBorderCoordinates.bottom)) {
-                clearField(gameData);
                 gameData.currentHead.Y += 1;
-                rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
             } else {
                 console.log('Game Over!');
                 gameData.gameOver = true;
             }
            break;
-        default:
-            break;
-    }
+           default:
+               break;
+        }
+
+        if (gameData.gameOver === false) {
+            rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
+        }
+        console.log("Switch ended!");
+        
 }
 
 const changeHeadCoordinatesWithoutFieldBorders = (gameData) => {
     console.log('Current HEAD: ' + 'X: ' + gameData.currentHead.X + ' ' + 'Y: ' + gameData.currentHead.Y);
+    clearField(gameData);
     switch(gameData.currentDirection){
         case 'right':
             if (gameData.currentHead.X === (gameData.fieldBorderCoordinates.right)) {
                 gameData.currentHead.X -= 25;
             }
-            clearField(gameData);
             gameData.currentHead.X += 1;
-            rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
             break;
         case 'left':
             if (gameData.currentHead.X === (gameData.fieldBorderCoordinates.left)) {
                 gameData.currentHead.X += 25;
             }
-            clearField(gameData);
             gameData.currentHead.X -= 1;
-            rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
            break;
         case 'up':
             if (gameData.currentHead.Y === (gameData.fieldBorderCoordinates.top )) {
                 gameData.currentHead.Y += 25;
             }
-            clearField(gameData);
             gameData.currentHead.Y -= 1;
-            rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
            break;
         case 'down':
             if (gameData.currentHead.Y === (gameData.fieldBorderCoordinates.bottom)) {
                 gameData.currentHead.Y -= 25;
             }
-            clearField(gameData);
             gameData.currentHead.Y += 1;
-            rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
-           break;
+            break;
         default:
             break;
-        }
-    console.log('END: '  + 'X: ' + gameData.currentHead.X + ' ' + 'Y: ' + gameData.currentHead.Y);
+    }
+    if (gameData.gameOver === false) {
+        rewriteSnakeCoordinates(gameData.snake.snakeCells, translateCoordinatesToIndex(gameData.currentHead));
+    }      console.log('END: '  + 'X: ' + gameData.currentHead.X + ' ' + 'Y: ' + gameData.currentHead.Y);
 }
 
 const translateCoordinatesToIndex = (currentHead) => {
@@ -258,10 +228,6 @@ const translateCoordinatesToNumber = (X = 0, Y = 0) => {
     }
     
 } // checked
-
-
-// const fieldCell = document.querySelectorAll('field__cell');
-
 
 const generateRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -301,7 +267,7 @@ const spawnApple = (gameData) => {
         if(coordinate  === gameData.snake.snakeCells[index].coordinate){
             spawnApple(gameData);
         }
-    }
+    }   
     // gameData.field[translateCoordinatesToNumber(gameData.apple.X, gameData.apple.Y)].fieldPart = 'apple';
 } // checked
 
@@ -343,30 +309,16 @@ const spawnSnake = (gameData) => {
     }
 }
 
-
-
-
 const syncSnakeWithField = (gameData) => {
     gameData.snake.snakeCells.forEach((element) => {
         gameData.field[element.coordinate].fieldPart = element.type;
-    });
-    // gameData.field[translateCoordinatesToIndex(gameData.apple)].fieldPart = 'apple';
-    
+    }); 
 } //BAD_FUNC
 
 const clearDisplayedField = (gameData) => {
     const fieldCell = document.querySelectorAll('.field__cell');
 
     gameData.field.forEach((element, index) => {
-        // if(fieldCell[index].classList.contains('snake__head')){
-        //     fieldCell[index].classList.remove('snake__head');
-        // }
-        // if(fieldCell[index].classList.contains('snake__body')){
-        //     fieldCell[index].classList.remove('snake__body');
-        // }
-        // if(fieldCell[index].classList.contains('apple')){
-        //     fieldCell[index].classList.remove('apple');
-        // }
         fieldCell[index].classList.remove('snake__head');
         fieldCell[index].classList.remove('snake__body');
         fieldCell[index].classList.remove('apple');
@@ -375,23 +327,25 @@ const clearDisplayedField = (gameData) => {
 
 const renderField = (gameData) => {
     
-    const fieldCell = document.querySelectorAll('.field__cell');
     clearDisplayedField(gameData);
+    const fieldCells = document.querySelectorAll('.field__cell');
     gameData.field.forEach((element, index) => {
         
-        if(element.fieldPart === 'head') {
-            fieldCell[index].classList.add('snake__head');
-        }
         if(element.fieldPart === 'body') {
-            fieldCell[index].classList.add('snake__body');
+            fieldCells[index].classList.remove('snake__head');
+            fieldCells[index].classList.remove('apple');
+            fieldCells[index].classList.add('snake__body');
+        }
+        if(element.fieldPart === 'head') {
+            fieldCells[index].classList.remove('snake__body');
+            fieldCells[index].classList.remove('apple');
+            fieldCells[index].classList.add('snake__head');
         }
         if(element.fieldPart === 'apple') {
-            fieldCell[index].classList.add('apple');
+            fieldCells[index].classList.remove('snake__head');
+            fieldCells[index].classList.remove('snake__body');
+            fieldCells[index].classList.add('apple');
         }
-        // if(fieldCell[index].classList.contains('snake__body') &&
-        //  fieldCell[index].classList.contains('snake__head')){
-        //     fieldCell[index].classList.remove('snake__body');
-        // }
     });
 } //checked
 
@@ -425,27 +379,54 @@ const checkIsCross = (snakeCells) => {
     }
     return false;
 }
+const restartGame = () => {
+    location.reload();
+}
+const startGame = () => {
+
+    const restartButton = document.querySelector('.restart__button');
+    const gameOverInner = document.querySelector('.gameOver__inner');
+    gameOverInner.classList.add('hide');
+
+    spawnApple(gameData);
+    clearField(gameData);
+    generateRandomDirection(gameData);
+    setStartCoordinates(gameData);
+    spawnSnake(gameData);
+    syncSnakeWithField(gameData);
+    renderField(gameData);
+    setInterval(updateGame, UPDATE_TIME);
+
+}
+
 
 const updateGame = () => {
     if(!gameData.gameOver){
-        
+        if(FIELD_BORDERS === true){
+            changeHeadCoordinatesWithFieldBorders(gameData);
+        }else{
+            changeHeadCoordinatesWithoutFieldBorders(gameData);
+        }
         gameData.field[translateCoordinatesToIndex(gameData.apple)].fieldPart = 'apple';
         listenButton(gameData);
-        // changeHeadCoordinatesWithFieldBorders(gameData);
-        changeHeadCoordinatesWithoutFieldBorders(gameData);
-        syncSnakeWithField(gameData);   
+        
+        syncSnakeWithField(gameData);
         renderField(gameData);
-
-        if(checkIsCross(gameData.snake.snakeCells)){
+        if(checkIsCross(gameData.snake.snakeCells) && CHECK_CROSS === true){
             gameData.gameOver = true;
-            console.log("TRUE")
-        }else{
-            console.log("FALSE")
         }
-
+        
+        
         if(isOnApple(gameData)){
             onApple(gameData);
         }
+        
+    } else {
+        restartButton.addEventListener("click", restartGame);
+        restartButton.classList.remove('hide');
+        const gameOverInner = document.querySelector('.gameOver__inner');
+        // gameOverInner.classList.remove('hide');
+
     }
 } // checked
 
@@ -458,34 +439,21 @@ const isOnApple = (gameData) => {
     
 } // cheked
 
-// const onApple = (gameData) => {
-    
-    
-    
-// }
+
+
 
 // Game Process
-spawnApple(gameData);
 
-generateRandomDirection(gameData);
-setStartCoordinates(gameData);
-
-// listenButton(gameData);
-// syncSnakeWithField(gameData)
-spawnSnake(gameData);
-renderField(gameData);
+startGame();
 
 
-setInterval(updateGame, UPDATE_TIME);
-
-// updateGame(gameData);
 
 // Game Process
 
 
 
 
-const updateTimeForm = document.querySelector("update__time_form");
-updateTimeForm.textContent = 'hello';
-console.log(updateTimeForm);
+// const updateTimeForm = document.querySelector("update__time_form");
+// updateTimeForm.textContent = 'hello';
+// console.log(updateTimeForm);
 

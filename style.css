@@ -24,7 +24,29 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    position: relative;
+    
+}
 
+.restart__button{
+    display: block;
+    width: 200px;
+    height: 50px;
+    background: #006eff;
+    color:#ff0000;
+    font-size: 40px;
+    text-align: center;
+    font-weight: 500;
+    font-family: 'Montserrat', sans-serif;
+    /* position: absolute; */
+    position: relative;
+    top: 50px;
+    margin: 0 auto;
+    cursor: pointer;
+    
+}
+.restart__button.hide{
+    display: none;
 }
 
 
@@ -51,23 +73,48 @@
 .field__cell:nth-child(2n+2){
     background-color: #39A845;
 }
-
-
-.field__cell.snake__body{
-    background: #784BD7;
-    border: #000000 solid 1px;
-}
-
-
 .field__cell.snake__head{
     background: url(./img/snake_head.svg);
     /* background-position: center;
     background-size: cover; */
     border: #000000 solid 1px;
+    z-index: 1000;
 }
 
+.field__cell.snake__body{
+    background: #784BD7;
+    z-index: 10;
+    border: #000000 solid 1px;
+}
+
+
+    
 .field__cell.apple{
     background: #ff0000;
     border: #000000 solid 1px;
     
+}
+
+
+.gameOver__inner{
+    display: block;
+    width: 800px;
+    height: 300px;
+    padding: 100px;
+    background: #006eff;
+    color:#ff0000;
+    font-size: 100px;
+    text-align: center;
+    font-weight: 500;
+    font-family: 'Montserrat', sans-serif;
+    position: absolute;
+    top: 30%;
+    left: 30%;
+    margin-left: -400px;
+    margin-top: -150px;
+
+    margin: 0 auto;
+}
+.gameOver__inner.hide{
+    display: none;
 }
